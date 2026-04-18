@@ -1,20 +1,38 @@
-function combineUsers(...arrays) {
-  // Merge all arrays using spread operator
-  let mergedUsers = [].concat(...arrays);
+function displayPosts(posts) {
+  const ul = document.getElementById("post-list");
 
-  // Get today's date
-  let today = new Date().toISOString().split("T")[0];
+  posts.forEach(post => {
 
-  // Return required object
-  return {
-    users: mergedUsers,
-    merge_date: today
-  };
+    const li = document.createElement("li");
+    const h1 = document.createElement("h1");
+    const p = document.createElement("p");
+
+    h1.textContent = post.title;
+    p.textContent = post.body;
+
+    li.appendChild(h1);
+    li.appendChild(p);
+    ul.appendChild(li);
+  });
 }
 
-module.exports = combineUsers;
+async function fetchPosts() {
+  try {
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
 
+    if (!response.ok) {
+      throw new Error("Failed to fetch posts");
+    }
 
-module.exports = {
-  ...(typeof combineUsers !== 'undefined' && { combineUsers })
-};
+    const data = await response.json();
+
+    console.log(data); 
+
+    displayPosts(data);
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+}
+
+fetchPosts();

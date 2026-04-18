@@ -1,38 +1,20 @@
-function displayPosts(posts) {
-  const ul = document.getElementById("post-list");
+function combineUsers(...arrays) {
+  // Merge all arrays using spread operator
+  let mergedUsers = [].concat(...arrays);
 
-  posts.forEach(post => {
+  // Get today's date
+  let today = new Date().toISOString().split("T")[0];
 
-    const li = document.createElement("li");
-    const h1 = document.createElement("h1");
-    const p = document.createElement("p");
-
-    h1.textContent = post.title;
-    p.textContent = post.body;
-
-    li.appendChild(h1);
-    li.appendChild(p);
-    ul.appendChild(li);
-  });
+  // Return required object
+  return {
+    users: mergedUsers,
+    merge_date: today
+  };
 }
 
-async function fetchPosts() {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
+module.exports = combineUsers;
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch posts");
-    }
 
-    const data = await response.json();
-
-    console.log(data); 
-
-    displayPosts(data);
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-fetchPosts();
+module.exports = {
+  ...(typeof combineUsers !== 'undefined' && { combineUsers })
+};

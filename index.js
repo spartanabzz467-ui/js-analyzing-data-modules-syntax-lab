@@ -1,38 +1,22 @@
-function displayPosts(posts) {
-  const ul = document.getElementById("post-list");
+require('datejs');
 
-  posts.forEach(post => {
+function combineUsers(...args) {
 
-    const li = document.createElement("li");
-    const h1 = document.createElement("h1");
-    const p = document.createElement("p");
+  const combinedObject = {
+    users: []
+  };
 
-    h1.textContent = post.title;
-    p.textContent = post.body;
-
-    li.appendChild(h1);
-    li.appendChild(p);
-    ul.appendChild(li);
+  args.forEach(arr => {
+    combinedObject.users.push(...arr);
   });
+
+  const today = new Date();
+  combinedObject.merge_date = today.toString("M/d/yyyy");
+
+  return combinedObject;
 }
 
-async function fetchPosts() {
-  try {
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts");
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch posts");
-    }
-
-    const data = await response.json();
-
-    console.log(data); 
-
-    displayPosts(data);
-
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-fetchPosts();
+module.exports = {
+  ...(typeof combineUsers !== 'undefined' && { combineUsers })
+};
